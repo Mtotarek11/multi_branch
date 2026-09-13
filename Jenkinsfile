@@ -8,11 +8,7 @@ pipeline {
     stages {
         stage('Build Docker Image') {
             steps {
-                script {
-                    sh """
-                        docker build -t ${APP_NAME}:${BUILD_NUMBER} -t ${APP_NAME}:latest .
-                    """
-                }
+                sh "docker build -t ${APP_NAME}:${BUILD_NUMBER} -t ${APP_NAME}:latest ."
             }
         }
 
@@ -20,11 +16,11 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh """
-                        echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
-                        docker tag ${APP_NAME}:${BUILD_NUMBER} ${DOCKER_USERNAME}/${APP_NAME}:${BUILD_NUMBER}
-                        docker tag ${APP_NAME}:latest ${DOCK_USERNAME}/${APP_NAME}:latest
-                        docker push ${DOCKER_USERNAME}/${APP_NAME}:${BUILD_NUMBER}
-                        docker push ${DOCK_USERNAME}/${APP_NAME}:latest
+                        echo "\$DOCKER_PASSWORD" | docker login -u "\$DOCKER_USERNAME" --password-stdin
+                        docker tag ${APP_NAME}:${BUILD_NUMBER} \$DOCKER_USERNAME/${APP_NAME}:${BUILD_NUMBER}
+                        docker tag ${APP_NAME}:latest \$DOCKER_USERNAME/${APP_NAME}:latest
+                        docker push \$DOCKER_USERNAME/${APP_NAME}:${BUILD_NUMBER}
+                        docker push \$DOCKER_USERNAME/${APP_NAME}:latest
                     """
                 }
             }
