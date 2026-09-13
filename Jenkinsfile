@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME = 'new-app-ntii' 
+        APP_NAME = 'new-app-ntiii' 
         REPO_URL = "https://github.com/Mtotarek11/multi_branch.git"
     }
 
