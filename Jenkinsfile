@@ -3,14 +3,13 @@ pipeline {
 
     environment {
         APP_NAME = 'new-app-nti' 
-        REPO_URL = "https://github.com/MohamedMagdy840/jenkins-repo.git"
+        REPO_URL = "https://github.com/Mtotarek11/multi_branch.git"
     }
 
     stages {
         stage('Getting Repo files') {
             steps {
-                // لو Job عادية وليست Multibranch، يفضل تحديد اسم البرانش صريحاً مثل main
-                git branch: 'main', credentialsId: 'jenkins', url: "${REPO_URL}"
+                git branch: 'main', credentialsId: 'github-token', url: "${REPO_URL}"
             }
         }
 
@@ -22,7 +21,6 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                // لو الكريدنشال عندك مسجلة في جينكس بـ ID قيمته 'docker' بدل 'docker-hub-credentials'، غيرها هنا
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh '''
                         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
